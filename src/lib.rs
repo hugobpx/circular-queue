@@ -45,7 +45,6 @@ use core::iter::{Chain, Rev};
 use core::mem::replace;
 #[cfg(has_extern_crate_alloc)]
 use core::slice::{Iter as SliceIter, IterMut as SliceIterMut};
-
 #[cfg(not(has_extern_crate_alloc))]
 use std::iter::{Chain, Rev};
 #[cfg(not(has_extern_crate_alloc))]
@@ -58,6 +57,10 @@ mod serde_support;
 
 /// A circular buffer-like queue.
 #[derive(Clone, Debug)]
+#[cfg_attr(
+    feature = "rkyv",
+    derive(rkyv::Archive, rkyv::Deserialize, rkyv::Serialize)
+)]
 pub struct CircularQueue<T> {
     data: Vec<T>,
     // Using our own capacity instead of the one stored in Vec to ensure consistent behavior with
